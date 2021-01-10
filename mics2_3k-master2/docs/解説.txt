@@ -1,0 +1,53 @@
+﻿■　ファイルの説明
+
+docs/
+source/
+  benchmark.cpp                 ベンチマーク用
+  bitboard.h/.cpp               Bitboard(盤面の駒のある場所や、ある駒による利きなどを表現するのに使う)
+  config.h                      各種コンパイルオプションに基づき、configurationを行なう。
+  evaluate.h/.cpp               評価関数
+  misc.h/.cpp                   乱数生成など
+  movegen.cpp                   指し手生成器
+  move_pick.h/.cpp              指し手のオーダリング器
+  position.h/.cpp               局面クラス
+  search.h/.cpp                 探索部
+  types.h/.cpp                  コンパイル時の設定や、各種構造体の定義。
+  usi.h/.cpp                    USIプロトコルによる入出力
+
+  extra/                        拡張用クラス
+    bitop.h                     SSE、AVXの命令をsoftwareでemulationするためのマクロ群
+    macros.h                    マクロ集。
+    test_cmd.cpp                USI拡張コマンドの"test"コマンド関係。
+
+■　コンパイル方法
+
+Visual Studio 2019 Community Edition(無料で使えます)でビルド一発で実行ファイルが出来るはずです。
+
+★　AVX2非対応のCPU用の実行ファイルの作り方。
+
+config.hで
+#define USE_AVX2
+をコメントアウトします。
+
+例)
+// #define USE_AVX2
+
+このままだと、コンパイルは通りますが、コンパイラが(明示的にAVX2の命令を使っていなくとも)
+AVX2用のコードを生成しますので、Visual Studioで以下のところを変更します。
+
+メニューの[デバッグ]→[YaneuraOuのプロパティ]→構成のプロパティ→C/C++
+→コード生成→「拡張命令セットを有効にする」のところ、/arch:AVX2が指定されてると
+思いますけど、それをご自分の環境に合わせる。
+
+
+★　SSE4.2非対応のCPU用の実行ファイルの作り方
+
+SSE4.2非対応ということはAVX2も非対応のはずなので、上のAVX2非対応のときの設定を行ない、
+さらに、config.hで
+#define USE_SSE42
+をコメントアウトします。
+
+例)
+// #define USE_SSE42
+
+	
